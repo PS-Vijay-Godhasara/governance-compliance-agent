@@ -322,6 +322,72 @@ services:
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open Pull Request
 
+## 📚 Documentation
+
+### Agent Documentation
+- [Policy Agent](docs/agents/policy-agent.md) - Natural language policy parsing
+- [RAG Agent](docs/agents/rag-agent.md) - Knowledge retrieval and context management
+- [Validation Agent](docs/agents/validation-agent.md) - Data validation, KYC, and risk assessment
+- [Schema Agent](docs/agents/schema-agent.md) - Database schema evolution management
+- [Explanation Agent](docs/agents/explanation-agent.md) - Human-readable explanations
+
+### User Guides
+- [End User Guide](docs/user-flows/end-user-guide.md) - Complete guide for business users
+- [Workflow Diagrams](docs/user-flows/workflow-diagrams.md) - Visual process flows
+- [MCP Integration](docs/mcp-integration.md) - Model Context Protocol integration
+- [Usage Guide](USAGE_GUIDE.md) - Comprehensive API documentation
+- [Architecture](AGENT_ARCHITECTURE.md) - System architecture details
+
+### Quick Examples
+
+#### Policy Creation & Validation
+```python
+# Create policy
+policy_id = await orchestrator.register_policy(
+    name="Customer Policy",
+    content="Customers must be 18+ with valid email"
+)
+
+# Validate data
+result = await orchestrator.validate(policy_id, {
+    "email": "user@example.com",
+    "age": 25
+})
+
+print(f"Valid: {result['data']['is_valid']}")
+```
+
+#### KYC Validation
+```python
+kyc_result = await orchestrator.perform_kyc_validation({
+    "identity_documents": [{"type": "passport", "expiry_date": "2025-12-31"}],
+    "date_of_birth": "1990-05-15"
+})
+
+print(f"KYC Status: {kyc_result['kyc_status']}")
+```
+
+#### Risk Assessment
+```python
+risk = await orchestrator.assess_risk({
+    "transaction_amount": 15000,
+    "country": "US"
+})
+
+print(f"Risk Level: {risk['risk_level']}")
+```
+
+#### MCP Integration
+```python
+from src.mcp.mcp_server import MCPServer
+
+mcp_server = MCPServer()
+response = await mcp_server.call_tool("validate_data", {
+    "data": {"email": "test@example.com"},
+    "rules": {"rules": [{"field": "email", "type": "email", "required": True}]}
+})
+```
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -336,10 +402,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🗺️ Roadmap
 
 ### Phase 1 (Current)
-- [x] Core policy interpretation engine
-- [x] Basic schema drift detection
-- [x] Simple validation rules
-- [ ] Multi-agent orchestration
+- [x] Multi-agent architecture
+- [x] RAG implementation with ChromaDB
+- [x] MCP server integration
+- [x] Policy parsing and validation
+- [x] KYC and risk assessment
+- [x] Schema drift detection
+- [x] Explanation generation
 
 ### Phase 2 (Q2 2024)
 - [ ] Advanced NLP for complex policies
