@@ -324,19 +324,22 @@ services:
 
 ## 📚 Documentation
 
-### Agent Documentation
-- [Policy Agent](docs/agents/policy-agent.md) - Natural language policy parsing
-- [RAG Agent](docs/agents/rag-agent.md) - Knowledge retrieval and context management
-- [Validation Agent](docs/agents/validation-agent.md) - Data validation, KYC, and risk assessment
-- [Schema Agent](docs/agents/schema-agent.md) - Database schema evolution management
-- [Explanation Agent](docs/agents/explanation-agent.md) - Human-readable explanations
+### Complete Documentation
+- [📖 Documentation Index](docs/README.md) - Complete documentation guide
+- [🏗️ System Architecture](docs/AGENT_ARCHITECTURE.md) - Detailed architecture overview
+- [📋 Usage Guide](docs/USAGE_GUIDE.md) - Comprehensive API documentation
+- [🤖 Agent Details](docs/agents/) - Individual agent documentation
+- [👥 User Flows](docs/user-flows/) - Business user guides and workflows
+- [🔌 MCP Integration](docs/mcp-integration.md) - Protocol integration guide
 
 ### User Guides
 - [End User Guide](docs/user-flows/end-user-guide.md) - Complete guide for business users
 - [Workflow Diagrams](docs/user-flows/workflow-diagrams.md) - Visual process flows
+- [Business Scenarios](docs/user-flows/business-scenarios.md) - Real-world use cases
 - [MCP Integration](docs/mcp-integration.md) - Model Context Protocol integration
-- [Usage Guide](USAGE_GUIDE.md) - Comprehensive API documentation
-- [Architecture](AGENT_ARCHITECTURE.md) - System architecture details
+- [Usage Guide](docs/USAGE_GUIDE.md) - Comprehensive API documentation
+- [Architecture](docs/AGENT_ARCHITECTURE.md) - System architecture details
+- [System Summary](docs/AGENT_SYSTEM_SUMMARY.md) - Complete system overview
 
 ### Quick Examples
 
@@ -394,10 +397,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🆘 Support
 
-- **Documentation**: [docs/](docs/)
+- **Documentation**: [Complete Docs](docs/README.md)
 - **Issues**: GitHub Issues
 - **Discussions**: GitHub Discussions
-- **Email**: governance-support@company.com
+- **Examples**: [examples/](examples/)
+- **Demo**: `python run_demo.py`
 
 ## 🗺️ Roadmap
 
