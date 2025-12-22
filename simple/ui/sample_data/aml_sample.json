@@ -1,0 +1,8 @@
+{
+  "customer_id": "CUST001",
+  "transaction_amount": 25000,
+  "source_of_funds": "salary",
+  "risk_country": false,
+  "pep_status": false,
+  "sanctions_check": true
+}

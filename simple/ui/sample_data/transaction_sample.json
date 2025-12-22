@@ -1,0 +1,7 @@
+{
+  "amount": 15000,
+  "currency": "USD",
+  "recipient_account": "ACC123456789",
+  "transaction_type": "transfer",
+  "country": "CA"
+}

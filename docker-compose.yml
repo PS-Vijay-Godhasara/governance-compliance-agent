@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  governance-agent:
+    build:
+      context: .
+      dockerfile: simple/Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      # AI Features
+      - USE_LLM=false
+      - AUTO_VALIDATION=true
+      - AUTO_POLICY_DETECTION=true
+      
+      # Compliance Features
+      - RISK_ASSESSMENT=true
+      - AML_SCREENING=true
+      - KYC_VALIDATION=true
+      - GDPR_ANALYSIS=true
+      - SANCTIONS_SCREENING=false
+      - PEP_SCREENING=false
+      
+      # Validation Thresholds
+      - HIGH_RISK_AMOUNT=50000
+      - AML_THRESHOLD=10000
+      - RISK_SCORE_THRESHOLD=0.7
+      
+      # File Processing
+      - MAX_FILE_SIZE=16777216
+      - ALLOWED_FILE_TYPES=json,txt,csv,pdf
+      - AUTO_FILE_ANALYSIS=true
+      - FILE_CONTENT_PREVIEW=true
+      
+      # Logging & Audit
+      - AUDIT_LOGGING=true
+      - COMPLIANCE_REPORTING=true
+      - VIOLATION_ALERTS=true
+      - PERFORMANCE_MONITORING=false
+      
+      # System
+      - PORT=5000
+      - DEBUG=false
+      - POLICIES_DIR=./policies
+      - KNOWLEDGE_DIR=./knowledge
+    volumes:
+      - ./simple/policies:/app/policies
+      - ./simple/knowledge:/app/knowledge
+      - governance_uploads:/app/ui/uploads
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Ollama service for LLM features
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    restart: unless-stopped
+    profiles:
+      - llm
+
+volumes:
+  governance_uploads:
+  ollama_data:

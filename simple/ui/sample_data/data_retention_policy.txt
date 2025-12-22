@@ -1,0 +1,53 @@
+COMPANY DATA RETENTION POLICY
+
+Effective Date: January 1, 2024
+Version: 2.1
+
+1. PURPOSE
+This policy establishes guidelines for the retention and disposal of company data to ensure compliance with legal requirements and business needs.
+
+2. SCOPE
+This policy applies to all employees, contractors, and third parties handling company data.
+
+3. DATA CATEGORIES
+
+3.1 Customer Personal Data
+- Retention Period: 7 years after account closure
+- Includes: Names, addresses, phone numbers, email addresses
+- Legal Basis: Financial regulations, tax requirements
+
+3.2 Financial Records
+- Retention Period: 10 years
+- Includes: Transaction records, invoices, payment data
+- Legal Basis: SOX compliance, tax regulations
+
+3.3 Employee Records
+- Retention Period: 7 years after employment termination
+- Includes: Personnel files, payroll records, performance reviews
+- Legal Basis: Employment law, tax requirements
+
+3.4 Marketing Data
+- Retention Period: 2 years or until consent withdrawn
+- Includes: Email preferences, campaign responses
+- Legal Basis: Legitimate interest, consent
+
+4. DATA DISPOSAL
+- Secure deletion methods required
+- Certificate of destruction for physical media
+- Audit trail maintained for all disposals
+
+5. COMPLIANCE REQUIREMENTS
+- GDPR Article 5(1)(e) - Storage limitation
+- CCPA Section 1798.105 - Right to deletion
+- SOX Section 802 - Document retention
+- HIPAA 45 CFR 164.316 - Administrative safeguards
+
+6. EXCEPTIONS
+Data may be retained longer if:
+- Legal hold requirements
+- Ongoing litigation
+- Regulatory investigation
+- Business continuity needs
+
+7. REVIEW
+This policy is reviewed annually and updated as needed to maintain compliance with evolving regulations.

@@ -1,0 +1,44 @@
+{
+  "name": "AML Compliance Check",
+  "description": "Anti-Money Laundering compliance validation",
+  "rules": [
+    {
+      "field": "customer_id",
+      "type": "string",
+      "required": true,
+      "description": "Unique customer identifier"
+    },
+    {
+      "field": "transaction_amount",
+      "type": "number",
+      "required": true,
+      "min": 0,
+      "description": "Transaction amount for AML screening"
+    },
+    {
+      "field": "source_of_funds",
+      "type": "string",
+      "required": true,
+      "enum": ["salary", "business", "investment", "inheritance", "other"],
+      "description": "Documented source of funds"
+    },
+    {
+      "field": "risk_country",
+      "type": "boolean",
+      "required": false,
+      "description": "Whether transaction involves high-risk country"
+    },
+    {
+      "field": "pep_status",
+      "type": "boolean",
+      "required": false,
+      "description": "Politically Exposed Person status"
+    },
+    {
+      "field": "sanctions_check",
+      "type": "boolean",
+      "required": true,
+      "description": "Sanctions screening completed"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "name": "Transaction Validation",
+  "description": "Validation rules for financial transactions",
+  "rules": [
+    {
+      "field": "amount",
+      "type": "number",
+      "required": true,
+      "min": 0.01,
+      "max": 1000000,
+      "description": "Transaction amount must be positive and within limits"
+    },
+    {
+      "field": "currency",
+      "type": "string",
+      "required": true,
+      "pattern": "^[A-Z]{3}$",
+      "description": "Valid 3-letter currency code (e.g., USD, EUR)"
+    },
+    {
+      "field": "recipient_account",
+      "type": "string",
+      "required": true,
+      "min_length": 8,
+      "description": "Valid recipient account number"
+    },
+    {
+      "field": "transaction_type",
+      "type": "string",
+      "required": true,
+      "enum": ["transfer", "payment", "withdrawal", "deposit"],
+      "description": "Type of transaction"
+    },
+    {
+      "field": "country",
+      "type": "string",
+      "required": false,
+      "description": "Destination country for international transfers"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "transaction_id": "TXN-2024-5678",
+  "timestamp": "2024-01-25T14:30:00Z",
+  "transaction_details": {
+    "amount": 85000,
+    "currency": "USD",
+    "transaction_type": "wire_transfer",
+    "purpose": "business_investment"
+  },
+  "sender": {
+    "customer_id": "CUST-2024-001",
+    "name": "Sarah Johnson",
+    "account": "ACC-123456789",
+    "country": "US"
+  },
+  "recipient": {
+    "name": "Global Investment Ltd",
+    "account": "ACC-987654321",
+    "bank": "International Bank",
+    "country": "SG",
+    "swift_code": "INTLSGSG"
+  },
+  "risk_indicators": {
+    "high_value": true,
+    "cross_border": true,
+    "new_recipient": true,
+    "unusual_pattern": false,
+    "cash_intensive_business": false
+  },
+  "compliance_checks": {
+    "sanctions_screening": "pending",
+    "pep_check": "clear",
+    "adverse_media": "clear",
+    "transaction_monitoring": "flagged"
+  },
+  "supporting_documents": [
+    {
+      "type": "investment_agreement",
+      "status": "provided"
+    },
+    {
+      "type": "source_of_funds",
+      "status": "required"
+    }
+  ]
+}

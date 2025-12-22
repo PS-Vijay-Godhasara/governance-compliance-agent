@@ -1,0 +1,47 @@
+{
+  "name": "Premium Customer Validation",
+  "description": "Enhanced validation for premium account holders",
+  "rules": [
+    {
+      "field": "email",
+      "type": "email", 
+      "required": true,
+      "description": "Valid email address"
+    },
+    {
+      "field": "age",
+      "type": "integer",
+      "required": true,
+      "min": 21,
+      "max": 120,
+      "description": "Must be 21 or older for premium services"
+    },
+    {
+      "field": "full_name",
+      "type": "string",
+      "required": true,
+      "min_length": 2,
+      "description": "Full legal name required"
+    },
+    {
+      "field": "phone",
+      "type": "string",
+      "required": true,
+      "pattern": "^\\+[1-9]\\d{1,14}$",
+      "description": "International phone number"
+    },
+    {
+      "field": "balance",
+      "type": "number",
+      "required": true,
+      "min": 50000,
+      "description": "Minimum $50,000 balance for premium status"
+    },
+    {
+      "field": "country",
+      "type": "string",
+      "required": true,
+      "description": "Country of residence"
+    }
+  ]
+}

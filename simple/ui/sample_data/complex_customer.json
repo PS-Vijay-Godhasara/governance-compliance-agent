@@ -1,0 +1,48 @@
+{
+  "customer_id": "CUST-2024-001",
+  "personal_info": {
+    "full_name": "Sarah Johnson",
+    "email": "sarah.johnson@email.com",
+    "phone": "+1234567890",
+    "date_of_birth": "1985-03-15",
+    "address": {
+      "street": "123 Business Ave",
+      "city": "New York",
+      "state": "NY",
+      "zip": "10001",
+      "country": "US"
+    }
+  },
+  "account_info": {
+    "account_type": "premium",
+    "balance": 125000,
+    "currency": "USD",
+    "account_status": "active",
+    "opening_date": "2024-01-15"
+  },
+  "kyc_documents": [
+    {
+      "type": "passport",
+      "number": "US123456789",
+      "expiry": "2028-05-20",
+      "verified": true
+    },
+    {
+      "type": "utility_bill",
+      "date": "2024-01-10",
+      "verified": true
+    }
+  ],
+  "risk_profile": {
+    "risk_level": "medium",
+    "pep_status": false,
+    "sanctions_check": "clear",
+    "source_of_funds": "employment"
+  },
+  "compliance_flags": {
+    "aml_screening": "passed",
+    "kyc_complete": true,
+    "enhanced_dd": false,
+    "last_review": "2024-01-20"
+  }
+}

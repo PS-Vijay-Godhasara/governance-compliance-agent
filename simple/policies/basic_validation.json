@@ -1,0 +1,33 @@
+{
+  "name": "Basic Customer Validation",
+  "description": "Minimal customer validation for quick signup",
+  "rules": [
+    {
+      "field": "email",
+      "type": "email", 
+      "required": true,
+      "description": "Valid email address"
+    },
+    {
+      "field": "age",
+      "type": "integer",
+      "required": true,
+      "min": 18,
+      "max": 120,
+      "description": "Must be 18 or older"
+    },
+    {
+      "field": "country",
+      "type": "string",
+      "required": false,
+      "description": "Country of residence"
+    },
+    {
+      "field": "balance",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "description": "Account balance"
+    }
+  ]
+}

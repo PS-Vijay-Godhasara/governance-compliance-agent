@@ -1,0 +1,32 @@
+{
+  "complaint_id": "COMP-2024-001",
+  "customer_id": "CUST-789456",
+  "date_submitted": "2024-01-15",
+  "complaint_type": "data_privacy",
+  "description": "Customer requests deletion of all personal data under GDPR Article 17 (Right to Erasure). Claims data is being processed without consent.",
+  "customer_details": {
+    "name": "Maria Rodriguez",
+    "email": "maria.r@email.com",
+    "phone": "+34612345678",
+    "country": "Spain",
+    "account_status": "active",
+    "last_login": "2024-01-10"
+  },
+  "data_categories": [
+    "personal_information",
+    "transaction_history",
+    "marketing_preferences",
+    "support_interactions"
+  ],
+  "legal_basis_claimed": "consent",
+  "consent_status": "withdrawn_2024-01-14",
+  "retention_requirements": {
+    "financial_records": "7_years_regulatory",
+    "tax_documents": "10_years_legal",
+    "fraud_prevention": "5_years_legitimate_interest"
+  },
+  "priority": "high",
+  "assigned_to": "privacy_officer",
+  "status": "under_review",
+  "deadline": "2024-02-14"
+}

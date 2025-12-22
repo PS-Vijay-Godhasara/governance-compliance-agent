@@ -1,0 +1,111 @@
+ANTI-MONEY LAUNDERING (AML) POLICY
+Version 3.2 | Effective Date: January 1, 2024
+
+1. EXECUTIVE SUMMARY
+This policy establishes comprehensive Anti-Money Laundering (AML) procedures to ensure compliance with applicable laws and regulations, including the Bank Secrecy Act (BSA), USA PATRIOT Act, and FinCEN requirements.
+
+2. SCOPE AND APPLICABILITY
+This policy applies to all employees, contractors, and third parties involved in:
+- Customer onboarding and due diligence
+- Transaction monitoring and reporting
+- Suspicious activity identification
+- Record keeping and documentation
+
+3. CUSTOMER DUE DILIGENCE (CDD)
+
+3.1 Standard CDD Requirements
+- Identity verification using government-issued photo ID
+- Address verification through utility bills or bank statements
+- Beneficial ownership identification for entities
+- Risk assessment based on customer profile
+
+3.2 Enhanced Due Diligence (EDD)
+Required for:
+- High-risk customers (PEPs, high-risk jurisdictions)
+- Transactions exceeding $50,000
+- Customers from sanctioned countries
+- Cash-intensive businesses
+
+3.3 Ongoing Monitoring
+- Annual review of customer risk profiles
+- Transaction pattern analysis
+- Adverse media screening
+- Sanctions list checking (daily)
+
+4. TRANSACTION MONITORING
+
+4.1 Automated Monitoring Systems
+- Real-time transaction screening
+- Pattern recognition algorithms
+- Threshold-based alerts
+- Cross-border transaction flagging
+
+4.2 Manual Review Triggers
+- Transactions over $10,000 (CTR threshold)
+- Unusual transaction patterns
+- Rapid movement of funds
+- Transactions with high-risk countries
+
+4.3 Suspicious Activity Reporting (SAR)
+- File SARs within 30 days of detection
+- Maintain confidentiality of SAR filings
+- Document decision-making process
+- Coordinate with law enforcement when required
+
+5. PROHIBITED ACTIVITIES
+- Shell bank relationships
+- Correspondent banking with unlicensed entities
+- Transactions with sanctioned individuals/entities
+- Structuring transactions to avoid reporting
+
+6. TRAINING AND AWARENESS
+- Annual AML training for all staff
+- Specialized training for high-risk roles
+- Regular updates on regulatory changes
+- Testing and certification requirements
+
+7. RECORD KEEPING
+- Customer identification records: 5 years after account closure
+- Transaction records: 5 years from transaction date
+- SAR documentation: 5 years from filing date
+- Training records: 3 years from completion
+
+8. GOVERNANCE AND OVERSIGHT
+
+8.1 AML Officer Responsibilities
+- Policy implementation and maintenance
+- Regulatory reporting and communication
+- Investigation oversight
+- Board and senior management reporting
+
+8.2 Independent Testing
+- Annual independent AML audit
+- Testing of monitoring systems
+- Review of policies and procedures
+- Assessment of training effectiveness
+
+9. REGULATORY COMPLIANCE
+- BSA/AML compliance program requirements
+- OFAC sanctions compliance
+- FinCEN reporting obligations
+- State and local AML requirements
+
+10. PENALTIES AND ENFORCEMENT
+Violations may result in:
+- Civil monetary penalties up to $1 million per violation
+- Criminal prosecution
+- Regulatory enforcement actions
+- Reputational damage
+
+11. POLICY REVIEW AND UPDATES
+- Annual policy review and approval
+- Updates based on regulatory changes
+- Incident-driven policy modifications
+- Board oversight of policy changes
+
+12. CONTACT INFORMATION
+AML Officer: compliance@company.com
+Regulatory Hotline: 1-800-COMPLIANCE
+Internal Reporting: aml-reports@company.com
+
+This policy is approved by the Board of Directors and must be followed by all personnel. Violations should be reported immediately to the AML Officer or through the anonymous reporting hotline.
