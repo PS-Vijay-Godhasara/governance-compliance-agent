@@ -1,0 +1,14 @@
+{
+  "customer_onboarding": {
+    "purpose": "Validate new customer registration",
+    "required_fields": [
+      "email",
+      "age",
+      "phone"
+    ],
+    "business_rules": [
+      "age >= 18",
+      "valid email format"
+    ]
+  }
+}

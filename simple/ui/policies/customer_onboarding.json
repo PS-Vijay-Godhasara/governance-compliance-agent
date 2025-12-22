@@ -1,0 +1,23 @@
+{
+  "name": "Customer Onboarding",
+  "rules": [
+    {
+      "field": "email",
+      "type": "email",
+      "required": true
+    },
+    {
+      "field": "age",
+      "type": "integer",
+      "required": true,
+      "min": 18,
+      "max": 120
+    },
+    {
+      "field": "phone",
+      "type": "string",
+      "required": true,
+      "pattern": "^\\+[1-9]\\d{1,14}$"
+    }
+  ]
+}

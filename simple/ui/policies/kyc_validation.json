@@ -1,0 +1,16 @@
+{
+  "name": "KYC Validation",
+  "rules": [
+    {
+      "field": "identity_documents",
+      "type": "array",
+      "required": true,
+      "min_items": 1
+    },
+    {
+      "field": "date_of_birth",
+      "type": "date",
+      "required": true
+    }
+  ]
+}

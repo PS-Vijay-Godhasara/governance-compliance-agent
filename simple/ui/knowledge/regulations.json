@@ -1,0 +1,23 @@
+{
+  "gdpr": {
+    "description": "EU General Data Protection Regulation",
+    "key_requirements": [
+      "consent",
+      "data_minimization",
+      "right_to_erasure"
+    ],
+    "penalties": "Up to 4% of annual revenue"
+  },
+  "kyc": {
+    "description": "Know Your Customer requirements",
+    "documents_required": [
+      "government_id",
+      "proof_of_address"
+    ],
+    "risk_categories": [
+      "low",
+      "medium",
+      "high"
+    ]
+  }
+}

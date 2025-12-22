@@ -1,9 +1,9 @@
 """Simple Orchestrator for Governance Workflows"""
 
 from typing import Dict, Any, List
-from engine import SimpleGovernanceEngine, ValidationResult
-from rag_service import SimpleRAGService
-from mcp_server import SimpleMCPServer
+from .engine import SimpleGovernanceEngine, ValidationResult
+from .rag_service import SimpleRAGService
+from .mcp_server import SimpleMCPServer
 
 class SimpleOrchestrator:
     def __init__(self, use_llm: bool = False, policies_dir: str = "./policies"):
@@ -11,6 +11,28 @@ class SimpleOrchestrator:
         self.use_llm = use_llm
         self.rag_service = SimpleRAGService()
         self.mcp_server = SimpleMCPServer()
+    
+    def validate_data(self, data: Dict[str, Any], policy_name: str) -> ValidationResult:
+        """Validate data using the engine"""
+        return self.engine.validate(policy_name, data)
+    
+    def process_natural_language(self, message: str) -> str:
+        """Process natural language message"""
+        if self.use_llm and self.engine.llm_service:
+            return self.engine.llm_service.process_message(message)
+        
+        # Basic responses without LLM
+        message_lower = message.lower()
+        if 'validate' in message_lower:
+            return "I can help you validate data against policies. Please provide the data and policy name."
+        elif 'policy' in message_lower:
+            return "I can explain policies and help create new ones. What would you like to know?"
+        elif 'gdpr' in message_lower:
+            return "GDPR is the EU General Data Protection Regulation that requires strict data protection measures."
+        elif 'kyc' in message_lower:
+            return "KYC (Know Your Customer) requires identity verification and due diligence for financial services."
+        else:
+            return "I'm a governance agent. I can help with validation, policies, and compliance questions."
     
     def validate(self, policy_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
         """Validate data against policy"""
