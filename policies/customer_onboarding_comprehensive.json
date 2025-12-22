@@ -1,0 +1,114 @@
+{
+  "policy_id": "customer_onboarding_comprehensive",
+  "name": "Comprehensive Customer Onboarding Policy",
+  "version": "2.0",
+  "description": "Complete customer validation rules for account creation",
+  "rules": [
+    {
+      "field": "email",
+      "type": "email",
+      "required": true,
+      "description": "Valid email address required for communication"
+    },
+    {
+      "field": "phone",
+      "type": "phone",
+      "required": true,
+      "pattern": "^\\+[1-9]\\d{1,14}$",
+      "description": "International phone number with country code"
+    },
+    {
+      "field": "age",
+      "type": "integer",
+      "required": true,
+      "min": 18,
+      "max": 120,
+      "description": "Customer must be of legal age"
+    },
+    {
+      "field": "full_name",
+      "type": "string",
+      "required": true,
+      "min_length": 2,
+      "max_length": 100,
+      "pattern": "^[a-zA-Z\\s'-]+$",
+      "description": "Full legal name with letters, spaces, hyphens, apostrophes only"
+    },
+    {
+      "field": "address",
+      "type": "object",
+      "required": true,
+      "properties": {
+        "street": {"type": "string", "required": true, "min_length": 5},
+        "city": {"type": "string", "required": true, "min_length": 2},
+        "country": {"type": "string", "required": true, "enum": ["US", "CA", "UK", "AU", "DE", "FR"]},
+        "postal_code": {"type": "string", "required": true, "min_length": 3}
+      },
+      "description": "Complete residential address required"
+    },
+    {
+      "field": "date_of_birth",
+      "type": "date",
+      "required": true,
+      "format": "YYYY-MM-DD",
+      "max_date": "today-18years",
+      "description": "Date of birth to verify age requirement"
+    },
+    {
+      "field": "employment_status",
+      "type": "string",
+      "required": true,
+      "enum": ["employed", "self_employed", "unemployed", "retired", "student"],
+      "description": "Current employment status"
+    },
+    {
+      "field": "annual_income",
+      "type": "number",
+      "required": false,
+      "min": 0,
+      "max": 10000000,
+      "description": "Annual income in USD (optional)"
+    },
+    {
+      "field": "identity_verification",
+      "type": "object",
+      "required": true,
+      "properties": {
+        "document_type": {"type": "string", "required": true, "enum": ["passport", "driver_license", "national_id"]},
+        "document_number": {"type": "string", "required": true, "min_length": 5},
+        "expiry_date": {"type": "date", "required": true, "min_date": "today+30days"}
+      },
+      "description": "Valid government-issued ID required"
+    },
+    {
+      "field": "consent",
+      "type": "object",
+      "required": true,
+      "properties": {
+        "terms_accepted": {"type": "boolean", "required": true, "value": true},
+        "privacy_policy_accepted": {"type": "boolean", "required": true, "value": true},
+        "marketing_consent": {"type": "boolean", "required": false}
+      },
+      "description": "Legal consent requirements"
+    }
+  ],
+  "business_rules": [
+    {
+      "name": "age_income_consistency",
+      "description": "Students under 25 may have lower income requirements",
+      "condition": "age < 25 AND employment_status == 'student'",
+      "action": "reduce_income_requirement"
+    },
+    {
+      "name": "high_risk_country_check",
+      "description": "Additional verification for certain countries",
+      "condition": "address.country IN ['XX', 'YY']",
+      "action": "require_additional_documents"
+    }
+  ],
+  "compliance": {
+    "gdpr_applicable": true,
+    "kyc_required": true,
+    "aml_screening": true
+  }
+}

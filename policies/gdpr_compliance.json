@@ -1,0 +1,106 @@
+{
+  "policy_id": "gdpr_compliance",
+  "name": "GDPR Data Protection Compliance Policy",
+  "version": "1.0",
+  "description": "EU GDPR compliance validation for personal data processing",
+  "jurisdiction": "EU",
+  "rules": [
+    {
+      "field": "data_subject_consent",
+      "type": "object",
+      "required": true,
+      "properties": {
+        "consent_given": {"type": "boolean", "required": true, "value": true},
+        "consent_date": {"type": "datetime", "required": true},
+        "consent_method": {"type": "string", "required": true, "enum": ["explicit", "opt_in"]},
+        "purpose_specified": {"type": "boolean", "required": true, "value": true}
+      },
+      "description": "Valid consent for data processing"
+    },
+    {
+      "field": "personal_data",
+      "type": "object",
+      "required": true,
+      "properties": {
+        "data_categories": {"type": "array", "required": true, "items": {"enum": ["identity", "contact", "financial", "behavioral"]}},
+        "processing_purpose": {"type": "string", "required": true, "enum": ["contract", "consent", "legal_obligation", "vital_interests", "public_task", "legitimate_interests"]},
+        "retention_period": {"type": "integer", "required": true, "min": 1, "max": 2555}
+      },
+      "description": "Personal data classification and purpose"
+    },
+    {
+      "field": "data_subject_rights",
+      "type": "object",
+      "required": true,
+      "properties": {
+        "right_to_access": {"type": "boolean", "required": true, "value": true},
+        "right_to_rectification": {"type": "boolean", "required": true, "value": true},
+        "right_to_erasure": {"type": "boolean", "required": true, "value": true},
+        "right_to_portability": {"type": "boolean", "required": true, "value": true}
+      },
+      "description": "Data subject rights implementation"
+    },
+    {
+      "field": "data_protection_measures",
+      "type": "object",
+      "required": true,
+      "properties": {
+        "encryption_at_rest": {"type": "boolean", "required": true, "value": true},
+        "encryption_in_transit": {"type": "boolean", "required": true, "value": true},
+        "access_controls": {"type": "boolean", "required": true, "value": true},
+        "audit_logging": {"type": "boolean", "required": true, "value": true}
+      },
+      "description": "Technical and organizational measures"
+    },
+    {
+      "field": "data_transfers",
+      "type": "object",
+      "required": false,
+      "properties": {
+        "third_country_transfer": {"type": "boolean"},
+        "adequacy_decision": {"type": "boolean"},
+        "safeguards_in_place": {"type": "boolean"},
+        "transfer_mechanism": {"type": "string", "enum": ["adequacy_decision", "standard_contractual_clauses", "binding_corporate_rules"]}
+      },
+      "description": "International data transfer safeguards"
+    },
+    {
+      "field": "breach_notification",
+      "type": "object",
+      "required": true,
+      "properties": {
+        "notification_procedure": {"type": "boolean", "required": true, "value": true},
+        "72_hour_notification": {"type": "boolean", "required": true, "value": true},
+        "data_subject_notification": {"type": "boolean", "required": true, "value": true}
+      },
+      "description": "Data breach notification procedures"
+    }
+  ],
+  "validation_rules": [
+    {
+      "name": "consent_age_verification",
+      "condition": "data_subject_age < 16",
+      "requirement": "parental_consent_required",
+      "description": "Parental consent required for minors under 16"
+    },
+    {
+      "name": "sensitive_data_protection",
+      "condition": "personal_data.data_categories CONTAINS 'sensitive'",
+      "requirement": "explicit_consent_required",
+      "description": "Explicit consent required for sensitive personal data"
+    },
+    {
+      "name": "retention_limit_check",
+      "condition": "personal_data.retention_period > 2555",
+      "requirement": "justification_required",
+      "description": "Retention period exceeds 7 years, justification needed"
+    }
+  ],
+  "compliance_checks": [
+    "lawful_basis_documented",
+    "privacy_notice_provided",
+    "consent_records_maintained",
+    "data_protection_impact_assessment",
+    "data_processor_agreements"
+  ]
+}
