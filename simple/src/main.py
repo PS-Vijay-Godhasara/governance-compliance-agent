@@ -1,7 +1,7 @@
 """Simple FastAPI Server for Governance Agent"""
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from dataclasses import dataclass
 from typing import Dict, Any, List
 import os
 import sys
@@ -16,20 +16,28 @@ app = FastAPI(title="Simple Governance Agent", version="1.0.0")
 # Initialize orchestrator
 orchestrator = SimpleOrchestrator(use_llm=True)
 
-class ValidationRequest(BaseModel):
+@dataclass
+class ValidationRequest:
     policy_id: str
     data: Dict[str, Any]
 
-class PolicyCreationRequest(BaseModel):
+@dataclass
+class PolicyCreationRequest:
     policy_text: str
     policy_id: str
 
-class KYCRequest(BaseModel):
-    identity_documents: List[Dict[str, Any]] = []
+@dataclass
+class KYCRequest:
+    identity_documents: List[Dict[str, Any]]
     date_of_birth: str = ""
-    address_proof: Dict[str, Any] = {}
+    address_proof: Dict[str, Any] = None
+    
+    def __post_init__(self):
+        if self.address_proof is None:
+            self.address_proof = {}
 
-class RiskRequest(BaseModel):
+@dataclass
+class RiskRequest:
     amount: float = 0
     country: str = ""
     age: int = 25
@@ -40,39 +48,47 @@ def root():
     return {"message": "Simple Governance Agent API", "version": "1.0.0"}
 
 @app.post("/validate")
-def validate_data(request: ValidationRequest):
+def validate_data(request: dict):
     """Validate data against policy"""
     try:
-        result = orchestrator.validate(request.policy_id, request.data)
+        policy_id = request.get("policy_id")
+        data = request.get("data")
+        if not policy_id or not data:
+            raise HTTPException(status_code=400, detail="Missing policy_id or data")
+        
+        result = orchestrator.validate(policy_id, data)
         return result
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 @app.post("/kyc/validate")
-def validate_kyc(request: KYCRequest):
+def validate_kyc(request: dict):
     """Validate KYC data"""
     try:
-        data = request.dict()
-        result = orchestrator.validate_kyc(data)
+        result = orchestrator.validate_kyc(request)
         return result
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 @app.post("/risk/assess")
-def assess_risk(request: RiskRequest):
+def assess_risk(request: dict):
     """Assess risk factors"""
     try:
-        data = request.dict()
-        result = orchestrator.assess_risk(data)
+        result = orchestrator.assess_risk(request)
         return result
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 @app.post("/policies/create")
-def create_policy(request: PolicyCreationRequest):
+def create_policy(request: dict):
     """Create policy from natural language"""
     try:
-        result = orchestrator.create_policy(request.policy_text, request.policy_id)
+        policy_text = request.get("policy_text")
+        policy_id = request.get("policy_id")
+        if not policy_text or not policy_id:
+            raise HTTPException(status_code=400, detail="Missing policy_text or policy_id")
+        
+        result = orchestrator.create_policy(policy_text, policy_id)
         return result
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

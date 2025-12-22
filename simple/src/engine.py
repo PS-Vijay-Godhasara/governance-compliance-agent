@@ -24,7 +24,7 @@ class SimpleGovernanceEngine:
         
         if use_llm:
             try:
-                from .llm_service import LLMService
+                from llm_service import LLMService
                 self.llm_service = LLMService()
             except ImportError:
                 self.use_llm = False

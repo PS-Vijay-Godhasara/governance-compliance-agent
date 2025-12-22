@@ -1,9 +1,9 @@
 """Simple Orchestrator for Governance Workflows"""
 
 from typing import Dict, Any, List
-from .engine import SimpleGovernanceEngine, ValidationResult
-from .rag_service import SimpleRAGService
-from .mcp_server import SimpleMCPServer
+from engine import SimpleGovernanceEngine, ValidationResult
+from rag_service import SimpleRAGService
+from mcp_server import SimpleMCPServer
 
 class SimpleOrchestrator:
     def __init__(self, use_llm: bool = False, policies_dir: str = "./policies"):

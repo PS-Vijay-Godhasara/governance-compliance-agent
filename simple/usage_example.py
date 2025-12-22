@@ -3,12 +3,14 @@
 
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
+
+# Add src to path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 from orchestrator import SimpleOrchestrator
 
 def main():
-    print("🤖 Simple Governance Agent Examples")
+    print("Simple Governance Agent Examples")
     print("=" * 40)
     
     # Initialize orchestrator
@@ -57,7 +59,7 @@ def main():
     policies = orchestrator.list_policies()
     print(f"   Available Policies: {policies}")
     
-    print("\n✅ Examples completed!")
+    print("\nExamples completed!")
 
 if __name__ == "__main__":
     main()
