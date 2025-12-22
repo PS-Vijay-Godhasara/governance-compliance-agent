@@ -2,6 +2,36 @@
 
 An autonomous AI agent that interprets natural-language policies, handles schema drift, and performs intelligent contextual validation at enterprise scale.
 
+## 🎯 Two Implementation Options
+
+### 🚀 **Simple Version** (Recommended for Getting Started)
+- **File-based policies** - No database required
+- **Minimal dependencies** - FastAPI + Pydantic only
+- **Quick setup** - Ready in minutes
+- **Easy testing** - Direct function calls
+
+**Quick Start:**
+```bash
+pip install -r requirements-simple.txt
+python run_simple_demo.py
+```
+
+**Documentation:** [Simple Guide](docs/SIMPLE_GUIDE.md)
+
+### 🏗️ **Full Version** (Enterprise Features)
+- **Multi-agent architecture** - Specialized AI agents
+- **Vector RAG** - ChromaDB knowledge base
+- **MCP integration** - Protocol-based tools
+- **Advanced workflows** - Complex orchestration
+
+**Quick Start:**
+```bash
+pip install -r requirements.txt
+python run_demo.py
+```
+
+**Documentation:** [Complete Docs](docs/README.md)
+
 ## 🎯 Problem Statement
 
 Enterprises struggle with:
@@ -360,6 +390,29 @@ result = await orchestrator.validate(policy_id, {
 print(f"Valid: {result['data']['is_valid']}")
 ```
 
+### 🧪 Testing & Verification
+
+#### Test Documentation
+- [📋 Test Prompts](docs/TEST_PROMPTS.md) - Comprehensive test cases and expected results
+- [🚀 Simple Test Prompts](docs/SIMPLE_TEST_PROMPTS.md) - Quick tests for simplified version
+
+#### Automated Testing
+```bash
+# Run all tests
+python test_runner.py --suite=all
+
+# Run specific test suite
+python test_runner.py --suite=basic
+python test_runner.py --suite=kyc
+python test_runner.py --suite=performance
+```
+
+#### Interactive Testing
+```bash
+# Interactive test menu
+python interactive_test.py
+```
+
 #### KYC Validation
 ```python
 kyc_result = await orchestrator.perform_kyc_validation({
@@ -398,10 +451,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🆘 Support
 
 - **Documentation**: [Complete Docs](docs/README.md)
+- **Testing**: [Test Prompts](docs/TEST_PROMPTS.md)
 - **Issues**: GitHub Issues
 - **Discussions**: GitHub Discussions
 - **Examples**: [examples/](examples/)
 - **Demo**: `python run_demo.py`
+- **Interactive Tests**: `python interactive_test.py`
 
 ## 🗺️ Roadmap
 
