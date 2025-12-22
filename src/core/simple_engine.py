@@ -4,6 +4,7 @@ import json
 import os
 from typing import Dict, Any, List
 from dataclasses import dataclass
+from .llm_service import LLMService
 
 
 @dataclass
@@ -12,14 +13,18 @@ class ValidationResult:
     score: float
     violations: List[Dict[str, Any]]
     policy_name: str
+    explanations: List[str] = None
+    natural_language_summary: str = ""
 
 
 class SimpleGovernanceEngine:
     """Simplified governance engine using file-based policies"""
     
-    def __init__(self, policies_dir: str = "./policies"):
+    def __init__(self, policies_dir: str = "./policies", use_llm: bool = True):
         self.policies_dir = policies_dir
         self.policies = {}
+        self.use_llm = use_llm
+        self.llm_service = LLMService() if use_llm else None
         self._load_policies()
     
     def _load_policies(self):
@@ -62,7 +67,7 @@ class SimpleGovernanceEngine:
     def validate_data(self, policy_id: str, data: Dict[str, Any]) -> ValidationResult:
         """Validate data against policy"""
         if policy_id not in self.policies:
-            return ValidationResult(False, 0.0, [{"error": "Policy not found"}], "Unknown")
+            return ValidationResult(False, 0.0, [{"error": "Policy not found"}], "Unknown", [], "Policy not found")
         
         policy = self.policies[policy_id]
         violations = []
@@ -115,7 +120,23 @@ class SimpleGovernanceEngine:
         score = max(0.0, score)
         is_valid = len(violations) == 0
         
-        return ValidationResult(is_valid, score, violations, policy["name"])
+        # Generate natural language explanations if LLM is available
+        explanations = []
+        natural_summary = ""
+        
+        if self.use_llm and self.llm_service and violations:
+            violation_messages = [v["message"] for v in violations]
+            llm_explanation = self.llm_service.explain_violations(
+                violation_messages, data, policy["name"]
+            )
+            explanations = [exp["explanation"] for exp in llm_explanation.get("explanations", [])]
+            natural_summary = llm_explanation.get("summary", "")
+        elif is_valid:
+            natural_summary = f"All validation rules passed for {policy['name']}"
+        else:
+            natural_summary = f"Found {len(violations)} validation issues"
+        
+        return ValidationResult(is_valid, score, violations, policy["name"], explanations, natural_summary)
     
     def _validate_type(self, value: Any, expected_type: str) -> bool:
         """Simple type validation"""
@@ -139,3 +160,37 @@ class SimpleGovernanceEngine:
     def list_policies(self) -> List[str]:
         """List available policies"""
         return list(self.policies.keys())
+    
+    def create_policy_from_text(self, policy_text: str, policy_id: str) -> Dict[str, Any]:
+        """Create policy from natural language text using LLM"""
+        if not self.use_llm or not self.llm_service:
+            return {"error": "LLM service not available"}
+        
+        policy_structure = self.llm_service.interpret_policy(policy_text)
+        policy_structure["policy_id"] = policy_id
+        
+        # Save policy to file
+        policy_file = os.path.join(self.policies_dir, f"{policy_id}.json")
+        with open(policy_file, 'w') as f:
+            json.dump(policy_structure, f, indent=2)
+        
+        # Add to loaded policies
+        self.policies[policy_id] = policy_structure
+        
+        return policy_structure
+    
+    def explain_policy(self, policy_id: str) -> str:
+        """Get natural language explanation of policy"""
+        if policy_id not in self.policies:
+            return "Policy not found"
+        
+        policy = self.policies[policy_id]
+        
+        if not self.use_llm or not self.llm_service:
+            # Fallback explanation
+            rules_count = len(policy.get("rules", []))
+            return f"Policy '{policy.get('name', policy_id)}' contains {rules_count} validation rules."
+        
+        # Use LLM for detailed explanation
+        prompt = f"Explain this policy in simple business terms: {json.dumps(policy, indent=2)}"
+        return self.llm_service._call_ollama(prompt)

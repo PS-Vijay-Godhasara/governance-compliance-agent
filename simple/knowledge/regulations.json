@@ -1,0 +1,36 @@
+{
+  "gdpr": {
+    "description": "EU General Data Protection Regulation",
+    "key_requirements": [
+      "Lawful basis for processing",
+      "Data subject consent",
+      "Right to erasure",
+      "Data portability",
+      "Privacy by design"
+    ],
+    "penalties": "Up to 4% of annual revenue or €20 million",
+    "applicability": "All organizations processing EU resident data"
+  },
+  "kyc": {
+    "description": "Know Your Customer requirements",
+    "documents_required": [
+      "Government-issued photo ID",
+      "Proof of address",
+      "Social security number (where applicable)"
+    ],
+    "risk_categories": ["low", "medium", "high"],
+    "verification_methods": ["document_check", "biometric_verification", "database_lookup"]
+  },
+  "aml": {
+    "description": "Anti-Money Laundering compliance",
+    "transaction_limits": {
+      "cash_reporting_threshold": 10000,
+      "suspicious_activity_threshold": 5000
+    },
+    "screening_requirements": [
+      "Sanctions list checking",
+      "PEP (Politically Exposed Person) screening",
+      "Adverse media screening"
+    ]
+  }
+}

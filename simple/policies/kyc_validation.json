@@ -1,0 +1,25 @@
+{
+  "name": "KYC Validation Policy",
+  "description": "Know Your Customer document verification requirements",
+  "rules": [
+    {
+      "field": "identity_documents",
+      "type": "array",
+      "required": true,
+      "min_items": 1,
+      "description": "At least one government-issued ID required"
+    },
+    {
+      "field": "date_of_birth", 
+      "type": "date",
+      "required": true,
+      "description": "Date of birth for age verification"
+    },
+    {
+      "field": "address_proof",
+      "type": "object",
+      "required": false,
+      "description": "Proof of residential address"
+    }
+  ]
+}

@@ -1,91 +1,106 @@
 """Simplified orchestrator for governance workflows"""
 
-from typing import Dict, Any
+from typing import Dict, Any, List
 from ..core.simple_engine import SimpleGovernanceEngine, ValidationResult
+from ..core.llm_service import LLMService
 
 
 class SimpleOrchestrator:
     """Simplified orchestrator without complex agent communication"""
     
-    def __init__(self, policies_dir: str = "./policies"):
-        self.engine = SimpleGovernanceEngine(policies_dir)
+    def __init__(self, engine: SimpleGovernanceEngine = None, use_llm: bool = True):
+        self.engine = engine or SimpleGovernanceEngine(use_llm=use_llm)
+        self.use_llm = use_llm
+        self.llm_service = LLMService() if use_llm else None
     
     def validate(self, policy_id: str, data: Dict[str, Any]) -> Dict[str, Any]:
         """Validate data against policy"""
         result = self.engine.validate_data(policy_id, data)
         
-        # Add simple explanations for violations
-        explanations = []
-        for violation in result.violations:
-            explanation = self._generate_explanation(violation)
-            explanations.append(explanation)
-        
         return {
             "is_valid": result.is_valid,
             "score": result.score,
-            "violations": result.violations,
-            "explanations": explanations,
-            "policy_name": result.policy_name
+            "violations": [v["message"] for v in result.violations],
+            "explanations": result.explanations or [],
+            "policy_name": result.policy_name,
+            "natural_language_summary": result.natural_language_summary
         }
     
-    def validate_kyc(self, customer_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Simplified KYC validation"""
+    def perform_kyc_validation(self, customer_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Enhanced KYC validation with LLM analysis"""
         result = self.engine.validate_data("kyc_validation", customer_data)
         
         # Simple KYC scoring
         kyc_score = result.score
         if kyc_score >= 0.8:
-            status = "approved"
+            status = "APPROVED"
+            risk_level = "LOW"
         elif kyc_score >= 0.5:
-            status = "review_required"
+            status = "REVIEW_REQUIRED"
+            risk_level = "MEDIUM"
         else:
-            status = "rejected"
+            status = "REJECTED"
+            risk_level = "HIGH"
+        
+        # Use LLM for enhanced analysis if available
+        explanation = ""
+        if self.use_llm and self.llm_service:
+            risk_analysis = self.llm_service.assess_risk_factors(customer_data, {"process": "kyc"})
+            explanation = risk_analysis.get("explanation", "")
+            if risk_analysis.get("risk_level"):
+                risk_level = risk_analysis["risk_level"]
         
         return {
             "kyc_status": status,
-            "kyc_score": kyc_score,
-            "issues": result.violations,
-            "recommendation": self._get_kyc_recommendation(status)
+            "risk_level": risk_level,
+            "documents_verified": len(customer_data.get("identity_documents", [])) > 0,
+            "violations": [v["message"] for v in result.violations],
+            "explanation": explanation or self._get_kyc_recommendation(status)
         }
     
     def assess_risk(self, data: Dict[str, Any]) -> Dict[str, Any]:
-        """Simple risk assessment"""
+        """Enhanced risk assessment with LLM analysis"""
+        # Use LLM for intelligent risk assessment if available
+        if self.use_llm and self.llm_service:
+            return self.llm_service.assess_risk_factors(data)
+        
+        # Fallback to simple rule-based assessment
         risk_score = 0.0
         risk_factors = []
         
         # Transaction amount risk
-        if "transaction_amount" in data:
-            amount = float(data["transaction_amount"])
-            if amount > 10000:
-                risk_score += 0.4
-                risk_factors.append({"factor": "high_value_transaction", "weight": 0.4})
-            elif amount > 5000:
-                risk_score += 0.2
-                risk_factors.append({"factor": "medium_value_transaction", "weight": 0.2})
+        amount = data.get("amount", data.get("transaction_amount", 0))
+        if amount > 10000:
+            risk_score += 0.4
+            risk_factors.append("High transaction amount")
+        elif amount > 5000:
+            risk_score += 0.2
+            risk_factors.append("Medium transaction amount")
         
         # Geographic risk
-        if "country" in data and data["country"] in ["XX", "YY"]:  # High-risk countries
+        if data.get("country") in ["XX", "YY"]:
             risk_score += 0.3
-            risk_factors.append({"factor": "high_risk_geography", "weight": 0.3})
+            risk_factors.append("High-risk country")
         
         # Age risk
-        if "age" in data and data["age"] < 21:
+        if data.get("age", 25) < 21:
             risk_score += 0.1
-            risk_factors.append({"factor": "young_customer", "weight": 0.1})
+            risk_factors.append("Young customer")
         
         # Determine risk level
         if risk_score >= 0.7:
-            risk_level = "high"
+            risk_level = "HIGH"
         elif risk_score >= 0.3:
-            risk_level = "medium"
+            risk_level = "MEDIUM"
         else:
-            risk_level = "low"
+            risk_level = "LOW"
         
         return {
             "risk_level": risk_level,
             "risk_score": min(1.0, risk_score),
             "risk_factors": risk_factors,
-            "recommendation": self._get_risk_recommendation(risk_level)
+            "requires_approval": risk_score >= 0.5,
+            "explanation": self._get_risk_recommendation(risk_level)
         }
     
     def get_policy(self, policy_id: str) -> Dict[str, Any]:
@@ -95,6 +110,24 @@ class SimpleOrchestrator:
     def list_policies(self) -> List[str]:
         """List available policies"""
         return self.engine.list_policies()
+    
+    def create_policy_from_text(self, policy_text: str, policy_id: str) -> Dict[str, Any]:
+        """Create policy from natural language description"""
+        return self.engine.create_policy_from_text(policy_text, policy_id)
+    
+    def explain_policy(self, policy_id: str) -> str:
+        """Get natural language explanation of policy"""
+        return self.engine.explain_policy(policy_id)
+    
+    def generate_compliance_report(self, validation_results: List[Dict[str, Any]]) -> str:
+        """Generate natural language compliance report"""
+        if self.use_llm and self.llm_service:
+            return self.llm_service.generate_compliance_report(validation_results)
+        
+        # Fallback simple report
+        total = len(validation_results)
+        passed = sum(1 for r in validation_results if r.get("is_valid", False))
+        return f"Compliance Report: {passed}/{total} validations passed. {total-passed} issues found."
     
     def _generate_explanation(self, violation: Dict[str, Any]) -> Dict[str, Any]:
         """Generate simple explanation for violation"""
