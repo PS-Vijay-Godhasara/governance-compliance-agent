@@ -4,6 +4,10 @@ import json
 from flask import Flask, render_template, request, jsonify, session
 from werkzeug.utils import secure_filename
 import uuid
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Add parent directory to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -18,8 +22,26 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 # Ensure upload directory exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-# Initialize orchestrator
-orchestrator = SimpleOrchestrator(use_llm=True)
+# Configuration from environment
+USE_LLM = os.getenv('USE_LLM', 'false').lower() == 'true'
+POLICIES_DIR = os.getenv('POLICIES_DIR', '../policies')
+PORT = int(os.getenv('PORT', 5000))
+DEBUG = os.getenv('DEBUG', 'true').lower() == 'true'
+
+# Initialize orchestrator with error handling
+try:
+    orchestrator = SimpleOrchestrator(use_llm=USE_LLM, policies_dir=POLICIES_DIR)
+    print(f"Orchestrator initialized successfully (LLM: {USE_LLM})")
+except Exception as e:
+    print(f"Error initializing orchestrator: {e}")
+    print("Falling back to basic mode without LLM")
+    try:
+        orchestrator = SimpleOrchestrator(use_llm=False, policies_dir=POLICIES_DIR)
+        USE_LLM = False
+        print("Orchestrator initialized in basic mode")
+    except Exception as e2:
+        print(f"Failed to initialize orchestrator: {e2}")
+        orchestrator = None
 
 @app.route('/')
 def index():
@@ -32,6 +54,9 @@ def index():
 def chat():
     """Handle chat messages"""
     try:
+        if orchestrator is None:
+            return jsonify({'error': 'Orchestrator not initialized'}), 500
+            
         data = request.json
         message = data.get('message', '').strip()
         
@@ -47,12 +72,16 @@ def chat():
         })
     
     except Exception as e:
+        print(f"Chat error: {e}")
         return jsonify({'error': f'Error processing message: {str(e)}'}), 500
 
 @app.route('/api/validate', methods=['POST'])
 def validate_data():
     """Handle data validation requests"""
     try:
+        if orchestrator is None:
+            return jsonify({'error': 'Orchestrator not initialized'}), 500
+            
         data = request.json
         validation_data = data.get('data', {})
         policy_name = data.get('policy', 'customer_onboarding')
@@ -61,13 +90,14 @@ def validate_data():
         result = orchestrator.validate_data(validation_data, policy_name)
         
         return jsonify({
-            'valid': result.valid,
+            'valid': result.is_valid,
             'score': result.score,
             'violations': result.violations,
-            'explanation': result.explanation
+            'explanation': result.summary
         })
     
     except Exception as e:
+        print(f"Validation error: {e}")
         return jsonify({'error': f'Validation error: {str(e)}'}), 500
 
 @app.route('/api/upload', methods=['POST'])
@@ -100,10 +130,10 @@ def upload_file():
                 
                 return jsonify({
                     'filename': filename,
-                    'valid': result.valid,
+                    'valid': result.is_valid,
                     'score': result.score,
                     'violations': result.violations,
-                    'explanation': result.explanation
+                    'explanation': result.summary
                 })
             
             elif filename.endswith(('.txt', '.csv')):
@@ -147,5 +177,17 @@ def get_policies():
     except Exception as e:
         return jsonify({'error': f'Error loading policies: {str(e)}'}), 500
 
+@app.route('/api/status')
+def get_status():
+    """Get system status"""
+    return jsonify({
+        'llm_enabled': USE_LLM,
+        'orchestrator_ready': orchestrator is not None,
+        'policies_dir': POLICIES_DIR
+    })
+
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    print(f"Starting Governance Agent UI on port {PORT}")
+    print(f"LLM enabled: {USE_LLM}")
+    print(f"Policies directory: {POLICIES_DIR}")
+    app.run(debug=DEBUG, host='0.0.0.0', port=PORT)

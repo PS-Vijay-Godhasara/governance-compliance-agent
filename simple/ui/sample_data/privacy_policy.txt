@@ -1,0 +1,29 @@
+Customer Data Processing Policy
+
+Our company processes customer data for the following purposes:
+- Account creation and management
+- Transaction processing and monitoring
+- Customer support and communication
+- Marketing and promotional activities
+- Compliance with regulatory requirements
+
+Data Collection:
+We collect personal information including names, email addresses, phone numbers, addresses, and financial information. This data is collected directly from customers during registration and through their use of our services.
+
+Data Storage:
+Customer data is stored in secure databases with encryption at rest and in transit. Access is restricted to authorized personnel only.
+
+Data Retention:
+We retain customer data for 7 years after account closure to comply with financial regulations. Marketing data is retained for 2 years unless the customer opts out.
+
+Third Party Sharing:
+We may share data with:
+- Payment processors for transaction handling
+- Credit agencies for risk assessment
+- Regulatory authorities when required by law
+- Service providers under strict confidentiality agreements
+
+Customer Rights:
+Customers have the right to access, correct, delete, or port their personal data. They can also object to processing or withdraw consent at any time.
+
+This policy complies with GDPR, CCPA, and other applicable data protection regulations.

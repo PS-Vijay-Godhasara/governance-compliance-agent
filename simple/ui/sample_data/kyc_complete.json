@@ -1,0 +1,17 @@
+{
+  "identity_documents": [
+    {
+      "type": "passport",
+      "number": "A12345678",
+      "expiry": "2025-12-31"
+    },
+    {
+      "type": "driver_license",
+      "number": "DL123456789",
+      "expiry": "2024-06-15"
+    }
+  ],
+  "date_of_birth": "1990-05-15",
+  "full_name": "John Smith",
+  "address": "123 Main St, City, State 12345"
+}

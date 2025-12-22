@@ -1,0 +1,8 @@
+{
+  "email": "john.doe@company.com",
+  "age": 28,
+  "phone": "+1234567890",
+  "country": "US",
+  "balance": 75000,
+  "account_type": "premium"
+}

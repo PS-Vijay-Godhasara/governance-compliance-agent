@@ -56,7 +56,7 @@
                             <br>• Compliance questions (GDPR, KYC, AML)
                             <br>• Policy explanations and creation
                             <br>• File analysis and validation
-                            <br><br>How can I assist you today?
+                            <br><br><span id="llmStatus">Checking system status...</span>
                         </div>
                     </div>
                 </div>
@@ -91,6 +91,25 @@
     </div>
 
     <script>
+        // Check system status on load
+        window.onload = function() {
+            fetch('/api/status')
+                .then(response => response.json())
+                .then(data => {
+                    const statusElement = document.getElementById('llmStatus');
+                    if (data.llm_enabled) {
+                        statusElement.innerHTML = '🤖 <strong>LLM Mode:</strong> Advanced AI responses enabled!';
+                        statusElement.style.color = '#28a745';
+                    } else {
+                        statusElement.innerHTML = '⚡ <strong>Basic Mode:</strong> Rule-based responses (LLM disabled)';
+                        statusElement.style.color = '#ffc107';
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('llmStatus').innerHTML = '❌ System status unavailable';
+                });
+        };
+
         function handleKeyPress(event) {
             if (event.key === 'Enter') {
                 sendMessage();
