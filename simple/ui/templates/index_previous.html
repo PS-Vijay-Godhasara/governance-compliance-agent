@@ -15,7 +15,7 @@
         }
         
         .container { 
-            max-width: 1600px; 
+            max-width: 1400px; 
             margin: 0 auto; 
             padding: 20px; 
             min-height: 100vh;
@@ -94,84 +94,9 @@
         .main-content {
             flex: 1;
             display: grid;
-            grid-template-columns: 300px 1fr 350px;
+            grid-template-columns: 1fr 350px;
             gap: 20px;
             align-items: start;
-        }
-        
-        .context-panel {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            padding: 20px;
-            height: 700px;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .context-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #f8f9fa;
-        }
-        
-        .context-header h3 {
-            color: #333;
-            font-size: 1.1em;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .context-clear {
-            background: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 15px;
-            padding: 5px 10px;
-            cursor: pointer;
-            font-size: 0.8em;
-            transition: all 0.3s ease;
-        }
-        
-        .context-clear:hover {
-            background: #c82333;
-            transform: scale(1.05);
-        }
-        
-        .context-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-        
-        .context-item {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-left: 4px solid #007bff;
-            font-size: 0.85em;
-        }
-        
-        .context-item .context-user {
-            font-weight: bold;
-            color: #007bff;
-            margin-bottom: 5px;
-        }
-        
-        .context-item .context-agent {
-            color: #666;
-            line-height: 1.4;
-        }
-        
-        .context-item .context-time {
-            font-size: 0.75em;
-            color: #999;
-            margin-top: 5px;
         }
         
         .chat-container { 
@@ -189,7 +114,6 @@
             color: white; 
             padding: 20px; 
             text-align: center;
-            position: relative;
         }
         
         .chat-header h3 { 
@@ -200,19 +124,6 @@
         .chat-header p { 
             opacity: 0.9; 
             font-size: 0.9em; 
-        }
-        
-        .typing-indicator {
-            position: absolute;
-            bottom: 5px;
-            right: 20px;
-            font-size: 0.8em;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .typing-indicator.show {
-            opacity: 1;
         }
         
         .chat-messages { 
@@ -239,37 +150,29 @@
         .user-message .bubble { 
             background: linear-gradient(135deg, #007bff, #0056b3); 
             color: white; 
-            padding: 15px 20px; 
-            border-radius: 25px 25px 8px 25px; 
+            padding: 12px 18px; 
+            border-radius: 20px 20px 5px 20px; 
             display: inline-block; 
             max-width: 75%; 
             box-shadow: 0 4px 12px rgba(0,123,255,0.3);
-            position: relative;
         }
         
         .agent-message .bubble { 
             background: white; 
             color: #333; 
-            padding: 15px 20px; 
-            border-radius: 25px 25px 25px 8px; 
+            padding: 12px 18px; 
+            border-radius: 20px 20px 20px 5px; 
             display: inline-block; 
             max-width: 75%; 
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             border-left: 4px solid #007bff;
-            position: relative;
-        }
-        
-        .message-time {
-            font-size: 0.7em;
-            opacity: 0.7;
-            margin-top: 5px;
         }
         
         .system-message .bubble { 
             background: linear-gradient(135deg, #28a745, #20c997); 
             color: white; 
-            padding: 12px 18px; 
-            border-radius: 20px; 
+            padding: 10px 15px; 
+            border-radius: 15px; 
             display: inline-block; 
             max-width: 85%; 
             font-size: 0.9em; 
@@ -323,6 +226,14 @@
             margin-bottom: 20px; 
         }
         
+        .examples h4 { 
+            margin-bottom: 15px; 
+            color: #495057; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
         .example-item { 
             background: white; 
             padding: 12px 15px; 
@@ -350,7 +261,6 @@
         .message-input { 
             display: flex; 
             gap: 10px; 
-            position: relative;
         }
         
         .message-input textarea { 
@@ -368,17 +278,6 @@
             outline: none;
             border-color: #007bff;
             box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
-        }
-        
-        .char-counter {
-            position: absolute;
-            bottom: 5px;
-            right: 15px;
-            font-size: 0.75em;
-            color: #999;
-            background: rgba(255,255,255,0.9);
-            padding: 2px 6px;
-            border-radius: 10px;
         }
         
         .file-input { 
@@ -439,12 +338,6 @@
         .btn:hover { 
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-        }
-        
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
         }
         
         .loading { 
@@ -563,16 +456,6 @@
             flex: 1; 
         }
         
-        @media (max-width: 1400px) {
-            .main-content {
-                grid-template-columns: 1fr 350px;
-            }
-            
-            .context-panel {
-                display: none;
-            }
-        }
-        
         @media (max-width: 1200px) {
             .main-content {
                 grid-template-columns: 1fr;
@@ -608,7 +491,7 @@
     <div class="container">
         <div class="header">
             <h1><i class="fas fa-shield-alt"></i> Governance & Compliance Agent</h1>
-            <p>Intelligent AI assistant with conversation context and advanced compliance automation</p>
+            <p>Intelligent AI assistant for compliance, validation, and governance automation</p>
             <div class="header-controls">
                 <span id="statusIndicator" class="status-indicator">
                     <i class="fas fa-spinner fa-spin"></i> Checking status...
@@ -678,54 +561,31 @@
         </div>
         
         <div class="main-content">
-            <!-- Context Panel -->
-            <div class="context-panel">
-                <div class="context-header">
-                    <h3><i class="fas fa-history"></i> Conversation Context</h3>
-                    <button class="context-clear" onclick="clearContext()">
-                        <i class="fas fa-trash"></i> Clear
-                    </button>
-                </div>
-                <div class="context-messages" id="contextMessages">
-                    <div style="text-align: center; color: #999; padding: 20px;">
-                        <i class="fas fa-comments"></i><br>
-                        Conversation history will appear here
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Main Chat -->
             <div class="chat-container">
                 <div class="chat-header">
                     <h3><i class="fas fa-comments"></i> Smart Governance Assistant</h3>
-                    <p>Context-aware AI with conversation memory and intelligent analysis</p>
-                    <div class="typing-indicator" id="typingIndicator">
-                        <i class="fas fa-ellipsis-h"></i> Agent is thinking...
-                    </div>
+                    <p>Chat naturally, paste JSON data, or upload files - I understand it all!</p>
                 </div>
                 
                 <div class="chat-messages" id="chatMessages">
                     <div class="message agent-message">
                         <div class="bubble">
-                            <strong>Welcome!</strong> I'm your intelligent Governance & Compliance Assistant with conversation memory. Here's what I can do:
+                            <strong>Welcome!</strong> I'm your intelligent Governance & Compliance Assistant. Here's what I can do:
                             <br><br>
-                            <i class="fas fa-brain"></i> <strong>Context Awareness:</strong> I remember our conversation and provide relevant responses
-                            <br><i class="fas fa-comments"></i> <strong>Natural Chat:</strong> Ask me anything about policies, compliance, or regulations
+                            <i class="fas fa-comments"></i> <strong>Natural Chat:</strong> Ask me anything about policies, compliance, or regulations
                             <br><i class="fas fa-chart-bar"></i> <strong>Smart Data Analysis:</strong> Paste JSON data and I'll automatically validate it
                             <br><i class="fas fa-file-alt"></i> <strong>File Intelligence:</strong> Upload documents for contextual analysis
                             <br><i class="fas fa-magic"></i> <strong>Auto-Detection:</strong> I automatically detect data types and apply appropriate policies
                             <br><br>
-                            <strong>Your conversation history appears in the left panel for easy reference!</strong>
+                            <strong>Try the examples below or just start typing!</strong>
                         </div>
-                        <div class="message-time" id="welcomeTime"></div>
                     </div>
                 </div>
                 
                 <div class="input-area">
                     <div class="input-container">
                         <div class="message-input">
-                            <textarea id="messageInput" placeholder="Type your message, paste JSON data, or ask questions about uploaded files..." onkeypress="handleKeyPress(event)" oninput="updateCharCounter()"></textarea>
-                            <div class="char-counter" id="charCounter">0/2000</div>
+                            <textarea id="messageInput" placeholder="Type your message, paste JSON data, or ask questions about uploaded files..." onkeypress="handleKeyPress(event)"></textarea>
                         </div>
                         
                         <div class="file-input">
@@ -735,7 +595,7 @@
                         </div>
                         
                         <div class="buttons">
-                            <button class="btn btn-primary" onclick="sendMessage()" id="sendButton">
+                            <button class="btn btn-primary" onclick="sendMessage()">
                                 <i class="fas fa-paper-plane"></i> Send Message
                             </button>
                             <button class="btn btn-success" onclick="sendWithFile()" id="fileButton" style="display: none;">
@@ -753,7 +613,6 @@
                 </div>
             </div>
             
-            <!-- Sidebar -->
             <div class="sidebar">
                 <h3><i class="fas fa-lightbulb"></i> Quick Examples</h3>
                 <div class="examples">
@@ -777,14 +636,14 @@
                     </div>
                 </div>
                 
-                <h3><i class="fas fa-info-circle"></i> Context Features</h3>
+                <h3><i class="fas fa-info-circle"></i> Tips</h3>
                 <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; font-size: 0.9em;">
-                    <p><strong>🧠 Smart Context:</strong></p>
+                    <p><strong>💡 Pro Tips:</strong></p>
                     <ul style="margin-left: 20px; margin-top: 10px;">
-                        <li>Remembers previous questions</li>
-                        <li>Builds on conversation history</li>
-                        <li>Provides contextual responses</li>
-                        <li>References past validations</li>
+                        <li>Paste JSON data directly in your message</li>
+                        <li>Upload files and ask specific questions</li>
+                        <li>Use natural language for complex queries</li>
+                        <li>Check settings for advanced features</li>
                     </ul>
                 </div>
             </div>
@@ -794,15 +653,10 @@
     <script>
         let selectedFile = null;
         let currentConfig = {};
-        let isTyping = false;
-
-        // Initialize welcome time
-        document.getElementById('welcomeTime').textContent = new Date().toLocaleTimeString();
 
         // Check system status on load
         window.onload = function() {
             loadConfiguration();
-            loadConversationContext();
             
             fetch('/api/status')
                 .then(response => response.json())
@@ -821,72 +675,6 @@
                     document.getElementById('statusIndicator').className = 'status-indicator status-offline';
                 });
         };
-
-        function loadConversationContext() {
-            fetch('/api/context')
-                .then(response => response.json())
-                .then(data => {
-                    const contextMessages = document.getElementById('contextMessages');
-                    if (data.conversation_history && data.conversation_history.length > 0) {
-                        contextMessages.innerHTML = '';
-                        data.conversation_history.forEach(item => {
-                            const contextItem = document.createElement('div');
-                            contextItem.className = 'context-item';
-                            contextItem.innerHTML = `
-                                <div class="context-user">${item.user.substring(0, 100)}${item.user.length > 100 ? '...' : ''}</div>
-                                <div class="context-agent">${item.agent.substring(0, 150)}${item.agent.length > 150 ? '...' : ''}</div>
-                                <div class="context-time">${new Date(item.timestamp).toLocaleTimeString()}</div>
-                            `;
-                            contextMessages.appendChild(contextItem);
-                        });
-                        contextMessages.scrollTop = contextMessages.scrollHeight;
-                    }
-                })
-                .catch(error => {
-                    console.error('Failed to load conversation context:', error);
-                });
-        }
-
-        function clearContext() {
-            if (confirm('🗑️ Clear conversation history? This will remove context for future responses.')) {
-                fetch('/api/context', { method: 'DELETE' })
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('contextMessages').innerHTML = `
-                            <div style="text-align: center; color: #999; padding: 20px;">
-                                <i class="fas fa-comments"></i><br>
-                                Conversation history cleared
-                            </div>
-                        `;
-                    })
-                    .catch(error => {
-                        console.error('Failed to clear context:', error);
-                    });
-            }
-        }
-
-        function updateCharCounter() {
-            const textarea = document.getElementById('messageInput');
-            const counter = document.getElementById('charCounter');
-            const length = textarea.value.length;
-            counter.textContent = `${length}/2000`;
-            
-            if (length > 1800) {
-                counter.style.color = '#dc3545';
-            } else if (length > 1500) {
-                counter.style.color = '#ffc107';
-            } else {
-                counter.style.color = '#999';
-            }
-        }
-
-        function showTypingIndicator() {
-            document.getElementById('typingIndicator').classList.add('show');
-        }
-
-        function hideTypingIndicator() {
-            document.getElementById('typingIndicator').classList.remove('show');
-        }
 
         function loadConfiguration() {
             fetch('/api/config')
@@ -1004,7 +792,6 @@
         function useExample(text) {
             document.getElementById('messageInput').value = text;
             document.getElementById('messageInput').focus();
-            updateCharCounter();
         }
 
         function handleFileSelect() {
@@ -1035,19 +822,10 @@
             const message = input.value.trim();
             
             if (!message) return;
-            if (message.length > 2000) {
-                alert('⚠️ Message too long. Please keep it under 2000 characters.');
-                return;
-            }
 
             addMessage(message, 'user');
             input.value = '';
-            updateCharCounter();
             showLoading();
-            showTypingIndicator();
-            
-            // Disable send button
-            document.getElementById('sendButton').disabled = true;
 
             fetch('/api/unified', {
                 method: 'POST',
@@ -1057,15 +835,10 @@
             .then(response => response.json())
             .then(data => {
                 hideLoading();
-                hideTypingIndicator();
-                document.getElementById('sendButton').disabled = false;
                 handleResponse(data);
-                loadConversationContext(); // Refresh context
             })
             .catch(error => {
                 hideLoading();
-                hideTypingIndicator();
-                document.getElementById('sendButton').disabled = false;
                 addMessage('❌ Error: ' + error.message, 'agent');
             });
         }
@@ -1081,13 +854,7 @@
 
             addMessage(`📁 Uploaded: ${selectedFile.name}${message ? '\n' + message : ''}`, 'user');
             input.value = '';
-            updateCharCounter();
             showLoading();
-            showTypingIndicator();
-            
-            // Disable buttons
-            document.getElementById('sendButton').disabled = true;
-            document.getElementById('fileButton').disabled = true;
 
             const formData = new FormData();
             formData.append('file', selectedFile);
@@ -1102,11 +869,7 @@
             .then(response => response.json())
             .then(data => {
                 hideLoading();
-                hideTypingIndicator();
-                document.getElementById('sendButton').disabled = false;
-                document.getElementById('fileButton').disabled = false;
                 handleResponse(data);
-                loadConversationContext(); // Refresh context
                 
                 // Clear file selection
                 document.getElementById('fileInput').value = '';
@@ -1116,9 +879,6 @@
             })
             .catch(error => {
                 hideLoading();
-                hideTypingIndicator();
-                document.getElementById('sendButton').disabled = false;
-                document.getElementById('fileButton').disabled = false;
                 addMessage('❌ Error: ' + error.message, 'agent');
             });
         }
@@ -1171,11 +931,7 @@
             const messagesDiv = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}-message`;
-            const time = new Date().toLocaleTimeString();
-            messageDiv.innerHTML = `
-                <div class="bubble">${text.replace(/\n/g, '<br>')}</div>
-                <div class="message-time">${time}</div>
-            `;
+            messageDiv.innerHTML = `<div class="bubble">${text.replace(/\n/g, '<br>')}</div>`;
             messagesDiv.appendChild(messageDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
@@ -1184,25 +940,20 @@
             const messagesDiv = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message system-message';
-            const time = new Date().toLocaleTimeString();
-            messageDiv.innerHTML = `
-                <div class="bubble"><i class="fas fa-cog"></i> ${text}</div>
-                <div class="message-time">${time}</div>
-            `;
+            messageDiv.innerHTML = `<div class="bubble"><i class="fas fa-cog"></i> ${text}</div>`;
             messagesDiv.appendChild(messageDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
         function clearChat() {
-            if (confirm('🗑️ Clear all chat messages? (Conversation context will be preserved)')) {
+            if (confirm('🗑️ Clear all chat messages?')) {
                 const messagesDiv = document.getElementById('chatMessages');
                 messagesDiv.innerHTML = `
                     <div class="message agent-message">
                         <div class="bubble">
                             <strong>Chat cleared!</strong> I'm ready to help with governance, compliance, and validation questions.
-                            <br><br>Your conversation context is preserved and I can still reference our previous discussions.
+                            <br><br>You can chat naturally, paste JSON data, or upload files for analysis.
                         </div>
-                        <div class="message-time">${new Date().toLocaleTimeString()}</div>
                     </div>
                 `;
             }

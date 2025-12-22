@@ -5,6 +5,7 @@ from flask import Flask, render_template, request, jsonify, session
 from werkzeug.utils import secure_filename
 import uuid
 from dotenv import load_dotenv
+from datetime import datetime
 
 # Load environment variables
 load_dotenv()
@@ -228,10 +229,16 @@ def get_policies():
 
 @app.route('/api/unified', methods=['POST'])
 def unified_interface():
-    """Handle unified chat, validation, and file upload"""
+    """Handle unified chat, validation, and file upload with context"""
     try:
         if orchestrator is None:
             return jsonify({'error': 'Orchestrator not initialized'}), 500
+        
+        # Get conversation context from session
+        if 'conversation_history' not in session:
+            session['conversation_history'] = []
+        
+        conversation_history = session['conversation_history']
         
         # Handle file upload
         if 'file' in request.files:
@@ -250,47 +257,94 @@ def unified_interface():
                     with open(filepath, 'r') as f:
                         file_data = json.load(f)
                     
-                    if message:
-                        # Chat about the uploaded data
-                        context = f"User uploaded file '{filename}' with data: {json.dumps(file_data, indent=2)}\n\nUser question: {message}"
-                        response = orchestrator.process_natural_language(context)
-                        
-                        # Also try validation if it looks like customer data
-                        validation_result = None
-                        if any(key in file_data for key in ['email', 'age', 'name', 'phone']):
-                            try:
-                                validation_result = orchestrator.validate_data(file_data, 'basic_validation')
-                            except:
-                                pass
-                        
-                        result = {
-                            'type': 'file_chat',
-                            'filename': filename,
-                            'response': response,
-                            'data': file_data
-                        }
-                        
-                        if validation_result:
-                            result['validation'] = {
-                                'valid': validation_result.is_valid,
-                                'score': validation_result.score,
-                                'violations': validation_result.violations,
-                                'explanation': validation_result.summary
-                            }
-                        
-                        os.remove(filepath)
-                        return jsonify(result)
+                    # Build context with conversation history
+                    context_messages = []
+                    for msg in conversation_history[-5:]:  # Last 5 messages for context
+                        context_messages.append(f"User: {msg.get('user', '')}")
+                        context_messages.append(f"Agent: {msg.get('agent', '')}")
                     
+                    context = "\n".join(context_messages) + "\n\n" if context_messages else ""
+                    context += f"User uploaded file '{filename}' with data: {json.dumps(file_data, indent=2)}\n\n"
+                    
+                    if message:
+                        context += f"User question: {message}"
+                        response = orchestrator.process_natural_language(context)
+                    else:
+                        context += "Please analyze this data for compliance and validation."
+                        response = orchestrator.process_natural_language(context)
+                    
+                    # Auto-validation
+                    validation_result = None
+                    if any(key in file_data for key in ['email', 'age', 'name', 'phone', 'amount', 'currency']):
+                        try:
+                            policy = 'basic_validation'
+                            if 'amount' in file_data and 'currency' in file_data:
+                                policy = 'transaction_validation'
+                            elif 'identity_documents' in file_data:
+                                policy = 'kyc_validation'
+                            elif 'balance' in file_data and file_data.get('balance', 0) >= 50000:
+                                policy = 'premium_customer'
+                            
+                            validation_result = orchestrator.validate_data(file_data, policy)
+                        except:
+                            pass
+                    
+                    # Store in conversation history
+                    conversation_entry = {
+                        'user': f"Uploaded {filename}: {message}" if message else f"Uploaded {filename}",
+                        'agent': response,
+                        'timestamp': datetime.now().isoformat()
+                    }
+                    conversation_history.append(conversation_entry)
+                    session['conversation_history'] = conversation_history[-20:]  # Keep last 20 exchanges
+                    
+                    result = {
+                        'type': 'file_chat',
+                        'filename': filename,
+                        'response': response,
+                        'data': file_data
+                    }
+                    
+                    if validation_result:
+                        result['validation'] = {
+                            'valid': validation_result.is_valid,
+                            'score': validation_result.score,
+                            'violations': validation_result.violations,
+                            'explanation': validation_result.summary,
+                            'policy_used': policy
+                        }
+                    
+                    os.remove(filepath)
+                    return jsonify(result)
+                
                 elif filename.endswith(('.txt', '.csv')):
                     with open(filepath, 'r') as f:
                         content = f.read()
                     
+                    # Build context with conversation history
+                    context_messages = []
+                    for msg in conversation_history[-5:]:
+                        context_messages.append(f"User: {msg.get('user', '')}")
+                        context_messages.append(f"Agent: {msg.get('agent', '')}")
+                    
+                    context = "\n".join(context_messages) + "\n\n" if context_messages else ""
+                    context += f"User uploaded document '{filename}' with content: {content[:2000]}...\n\n"
+                    
                     if message:
-                        context = f"User uploaded document '{filename}' with content: {content[:2000]}...\n\nUser question: {message}"
+                        context += f"User question: {message}"
                     else:
-                        context = f"Analyze this document for compliance and governance: {content[:1000]}..."
+                        context += "Please analyze this document for compliance and governance issues."
                     
                     response = orchestrator.process_natural_language(context)
+                    
+                    # Store in conversation history
+                    conversation_entry = {
+                        'user': f"Uploaded {filename}: {message}" if message else f"Uploaded {filename}",
+                        'agent': response,
+                        'timestamp': datetime.now().isoformat()
+                    }
+                    conversation_history.append(conversation_entry)
+                    session['conversation_history'] = conversation_history[-20:]
                     
                     os.remove(filepath)
                     return jsonify({
@@ -311,10 +365,18 @@ def unified_interface():
         if not message:
             return jsonify({'error': 'Message cannot be empty'}), 400
         
+        # Build context with conversation history
+        context_messages = []
+        for msg in conversation_history[-5:]:
+            context_messages.append(f"User: {msg.get('user', '')}")
+            context_messages.append(f"Agent: {msg.get('agent', '')}")
+        
+        context = "\n".join(context_messages) + "\n\n" if context_messages else ""
+        context += f"Current user message: {message}"
+        
         # Try to extract JSON from message
         json_data = None
         try:
-            # Look for JSON patterns in the message
             import re
             json_match = re.search(r'\{[^{}]*\}', message)
             if json_match:
@@ -326,24 +388,38 @@ def unified_interface():
         if json_data:
             # Message contains JSON data - provide validation and chat
             validation_result = None
+            policy = 'basic_validation'
+            
             if any(key in json_data for key in ['email', 'age', 'name', 'phone', 'amount', 'transaction_type']):
                 try:
-                    # Auto-detect policy based on data fields
-                    policy = 'basic_validation'
                     if 'amount' in json_data and 'currency' in json_data:
                         policy = 'transaction_validation'
                     elif 'identity_documents' in json_data:
                         policy = 'kyc_validation'
                     elif 'balance' in json_data and json_data.get('balance', 0) >= 50000:
                         policy = 'premium_customer'
+                    elif 'phone' in json_data and 'full_name' in json_data:
+                        policy = 'customer_onboarding'
                     
                     validation_result = orchestrator.validate_data(json_data, policy)
                 except:
                     pass
             
-            # Generate contextual response
-            context = f"User provided data: {json.dumps(json_data, indent=2)}\n\nUser message: {message}"
+            # Generate contextual response with validation info
+            context += f"\n\nData to analyze: {json.dumps(json_data, indent=2)}"
+            if validation_result:
+                context += f"\n\nValidation result: {validation_result.summary}"
+            
             response = orchestrator.process_natural_language(context)
+            
+            # Store in conversation history
+            conversation_entry = {
+                'user': message,
+                'agent': response,
+                'timestamp': datetime.now().isoformat()
+            }
+            conversation_history.append(conversation_entry)
+            session['conversation_history'] = conversation_history[-20:]
             
             result = {
                 'type': 'data_chat',
@@ -362,8 +438,18 @@ def unified_interface():
             
             return jsonify(result)
         
-        # Regular chat message
-        response = orchestrator.process_natural_language(message)
+        # Regular chat message with context
+        response = orchestrator.process_natural_language(context)
+        
+        # Store in conversation history
+        conversation_entry = {
+            'user': message,
+            'agent': response,
+            'timestamp': datetime.now().isoformat()
+        }
+        conversation_history.append(conversation_entry)
+        session['conversation_history'] = conversation_history[-20:]
+        
         return jsonify({
             'type': 'chat',
             'response': response,
@@ -374,6 +460,31 @@ def unified_interface():
         print(f"Unified interface error: {e}")
         return jsonify({'error': f'Error processing request: {str(e)}'}), 500
 
+@app.route('/api/context', methods=['GET'])
+def get_conversation_context():
+    """Get conversation history for context display"""
+    try:
+        if 'conversation_history' not in session:
+            session['conversation_history'] = []
+        
+        history = session['conversation_history'][-10:]  # Last 10 exchanges
+        return jsonify({
+            'conversation_history': history,
+            'total_messages': len(session['conversation_history'])
+        })
+    
+    except Exception as e:
+        return jsonify({'error': f'Error retrieving context: {str(e)}'}), 500
+
+@app.route('/api/context', methods=['DELETE'])
+def clear_conversation_context():
+    """Clear conversation history"""
+    try:
+        session['conversation_history'] = []
+        return jsonify({'message': 'Conversation history cleared'})
+    
+    except Exception as e:
+        return jsonify({'error': f'Error clearing context: {str(e)}'}), 500
 @app.route('/api/config', methods=['GET', 'POST'])
 def manage_config():
     """Get or update system configuration"""
