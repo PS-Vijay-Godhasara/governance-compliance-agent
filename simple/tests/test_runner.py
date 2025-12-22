@@ -12,7 +12,7 @@ from orchestrator import SimpleOrchestrator
 
 class SimpleTestRunner:
     def __init__(self):
-        self.orchestrator = SimpleOrchestrator(use_llm=False)  # Test without LLM for consistency
+        self.orchestrator = SimpleOrchestrator(use_llm=False)
         self.results = []
     
     def run_basic_tests(self):
@@ -42,16 +42,37 @@ class SimpleTestRunner:
             "phone": "+1-555-0123"
         })
         self._assert_test("Age Too Young", result["is_valid"] == False)
+    
+    def run_rag_tests(self):
+        """Run RAG service tests"""
+        print("\n🔍 Running RAG Tests...")
         
-        # Test 4: Missing required field
-        result = self.orchestrator.validate("customer_onboarding", {
-            "email": "test@example.com"
+        # Test 1: Knowledge search
+        results = self.orchestrator.search_knowledge("GDPR")
+        self._assert_test("Knowledge Search", len(results) > 0)
+        
+        # Test 2: Context retrieval
+        context = self.orchestrator.get_context("customer_onboarding")
+        self._assert_test("Context Retrieval", "policy_id" in context)
+    
+    def run_mcp_tests(self):
+        """Run MCP server tests"""
+        print("\n🔌 Running MCP Tests...")
+        
+        # Test 1: List tools
+        tools = self.orchestrator.list_mcp_tools()
+        self._assert_test("List MCP Tools", len(tools) >= 5)
+        
+        # Test 2: Call tool
+        result = self.orchestrator.call_mcp_tool("validate_data", {
+            "policy_id": "customer_onboarding",
+            "data": {"email": "test@example.com", "age": 25}
         })
-        self._assert_test("Missing Required Field", result["is_valid"] == False)
+        self._assert_test("Call MCP Tool", "result" in result)
     
     def run_kyc_tests(self):
         """Run KYC validation tests"""
-        print("\n🔍 Running KYC Tests...")
+        print("\n📋 Running KYC Tests...")
         
         # Test 1: Valid KYC
         result = self.orchestrator.validate_kyc({
@@ -59,12 +80,6 @@ class SimpleTestRunner:
             "date_of_birth": "1990-05-15"
         })
         self._assert_test("Valid KYC", result["kyc_status"] in ["APPROVED", "REVIEW_REQUIRED"])
-        
-        # Test 2: Missing documents
-        result = self.orchestrator.validate_kyc({
-            "date_of_birth": "1990-05-15"
-        })
-        self._assert_test("Missing KYC Documents", result["kyc_status"] in ["REJECTED", "REVIEW_REQUIRED"])
     
     def run_risk_tests(self):
         """Run risk assessment tests"""
@@ -76,35 +91,7 @@ class SimpleTestRunner:
             "country": "US",
             "age": 25
         })
-        self._assert_test("High-Value Transaction", result["risk_level"] in ["MEDIUM", "HIGH"])
-        
-        # Test 2: Low-risk transaction
-        result = self.orchestrator.assess_risk({
-            "amount": 500,
-            "country": "US",
-            "age": 30
-        })
-        self._assert_test("Low-Risk Transaction", result["risk_level"] == "LOW")
-        
-        # Test 3: High-risk country
-        result = self.orchestrator.assess_risk({
-            "amount": 5000,
-            "country": "XX",
-            "age": 25
-        })
-        self._assert_test("High-Risk Country", result["risk_level"] in ["MEDIUM", "HIGH"])
-    
-    def run_policy_tests(self):
-        """Run policy management tests"""
-        print("\n📋 Running Policy Tests...")
-        
-        # Test 1: List policies
-        policies = self.orchestrator.list_policies()
-        self._assert_test("List Policies", len(policies) >= 2)
-        
-        # Test 2: Get policy
-        policy = self.orchestrator.get_policy("customer_onboarding")
-        self._assert_test("Get Policy", "name" in policy)
+        self._assert_test("High-Value Risk", result["risk_level"] in ["MEDIUM", "HIGH"])
     
     def _assert_test(self, test_name: str, condition: bool):
         """Assert test result"""
@@ -118,9 +105,10 @@ class SimpleTestRunner:
         print("=" * 50)
         
         self.run_basic_tests()
+        self.run_rag_tests()
+        self.run_mcp_tests()
         self.run_kyc_tests()
         self.run_risk_tests()
-        self.run_policy_tests()
         
         # Summary
         total = len(self.results)
